@@ -22,12 +22,34 @@
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
 -->
 
-Number and name of feature: ________________________________
+Number and name of feature: features 1-4
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: 4 hours
 
-Start time: _____
+Start time: 9 am
 
-Finish time: _____
+Finish time: 1:30
 
-Actual time needed to complete: _____
+Actual time needed to complete: 6 hours total
+
+<!-- finish ejs and css -->
+
+Number and name of feature: Schema
+
+DROP TABLE IF EXISTS books;
+
+CREATE TABLE books (
+  id SERIAL PRIMARY KEY,
+  author VARCHAR (255),
+  title VARCHAR(255),
+  ISBN VARCHAR (255),
+  image_URL VARCHAR (255),
+  bookshelf VARCHAR  (255),
+  description TEXT
+);
+
+INSERT INTO books (author, title, ISBN, image_URL, bookshelf, description)
+
+VALUES ('author','title','ISBN','image_URL', 'bookshelf', 'description');
+
+
