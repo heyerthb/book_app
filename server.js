@@ -24,14 +24,31 @@ app.get('/', newSearch);
 app.post('/searches', createSearch);
 
 
-//ASSIST FUNCTIONS!
-function Book(info){
-  const placeholder = 'https://i.imgur.com/J5LVHEL.jpg';
+// //////////////ERROR HANDLER .
+const path = '*'
+function pathNotFoundHandler(request, response){
+  return response.status(404).send('You shall not pass');
+}
 
-  this.title = info.title || 'no title available';
-  this.authors = info.authors || 'no author available';
-  this.image = info.imageLinks.thumbnail;
-  this.description = info.description || 'no description available'
+////CATCH ALL
+app.get(path, pathNotFoundHandler);
+app.get('*', (request, response) => response.status(404).send('This route does not exist'));
+
+
+
+//ASSIST FUNCTIONS!
+
+
+function Book(info){
+  const placeholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
+
+  let httpRegex = /^(https:\/\/)?g/
+
+  this.title = info.title ? info.title : 'no title available';
+  this.authors = info.authors ? info.author : 'no author available';
+  this.isbn = info.industryIdentifier ? `ISBN_13 ${info.industryIdentifier[0].industryIdentifier}` : 'No ISBN available'; 
+  this.image = this.image = info.imageLinks ? info.imageLinks.thumbnail.replace(httpRegex, 'https') : placeholderImage;
+  this.description = info.description ? info.description :'no description available'
 
 }
 
@@ -50,34 +67,25 @@ function createSearch(request, response) {
 
   superagent.get(url)
     .then(apiResponse => {
-      console.log('*********************************************api res', apiResponse.body.items[0].volumeInfo);
       return apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo));
     })
-
     .then(results => {
-      console.log('*************************************here is super agent', superagent.get)
       return response.render('pages/searches/show', {searchResults: results})
-
     })
+    .catch(error => handleError(error, response));
 }
 
-// goodbye ryan...
+
+
+// ERROR HANDLER//////////////////
+function handleError (error, response){
+  console.error(error);
+  response.status(500).send('No no no')
+}
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-app.get('*', (request, response) => response.status(404).send('This route does not exist'));
 
 app.listen(PORT, () => console.log(`App is listening on ${PORT}`));
 
