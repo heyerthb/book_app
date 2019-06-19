@@ -29,7 +29,7 @@ function Book(info){
   const placeholder = 'https://i.imgur.com/J5LVHEL.jpg';
 
   this.title = info.title || 'no title available';
-  this.author = info.author || 'no author available';
+  this.authors = info.authors || 'no author available';
   this.image = info.imageLinks.thumbnail;
   this.description = info.description || 'no description available'
 
