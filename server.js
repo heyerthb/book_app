@@ -45,9 +45,9 @@ function Book(info){
   let httpRegex = /^(https:\/\/)?g/
 
   this.title = info.title ? info.title : 'no title available';
-  this.authors = info.authors ? info.author : 'no author available';
-  this.isbn = info.industryIdentifier ? `ISBN_13 ${info.industryIdentifier[0].industryIdentifier}` : 'No ISBN available'; 
-  this.image = this.image = info.imageLinks ? info.imageLinks.thumbnail.replace(httpRegex, 'https') : placeholderImage;
+  this.authors = info.authors ? info.authors : 'no author available';
+  this.isbn = info.industryIdentifiers ? `ISBN_13 ${info.industryIdentifiers[0].identifier}` : 'No ISBN available'; 
+  this.image = info.imageLinks ? info.imageLinks.thumbnail.replace(httpRegex, 'https') : placeholderImage;
   this.description = info.description ? info.description :'no description available'
 
 }
@@ -66,7 +66,9 @@ function createSearch(request, response) {
   if (request.body.search[1] === 'author') { url += `+inauthor:${request.body.search[0]}`; }
 
   superagent.get(url)
+
     .then(apiResponse => {
+      console.log(apiResponse.body.items[0].volumeInfo)
       return apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo));
     })
     .then(results => {
