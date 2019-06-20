@@ -24,6 +24,7 @@ client.on('error', err => console.error(err));
 //API Routs
 app.get('/', newSearch);
 app.get('/', getBooks);
+app.post('/books', createBooks)
 app.post('/searches', createSearch);
 app.post('/index')
 // app.get('/', (request, response) =>{  Not sure what this is RN
@@ -49,7 +50,22 @@ function getBooks(request, response){
     })
     .catch (err => handleError(err, response));
 }
+function createBooks(request, response){
+  let { title, author, isbn, image_url, description, bookshelf } = require.body;
+  let SQL = `INSERT INTO books (title, author, isbn, image_url, description, bookshelf) VALUES($1, $2, $3, $4, $5, $6):`;
+  let values = [title, author, isbn, image_url, description, bookshelf];
 
+  return client.query(SQL, values)
+    .then(()=> {
+      SQL = `SELECT * FROM "books" WHERE isbn=$1`;
+      values =[require.body.isbn];
+      return client.query(SQL, values)
+        .then(results => response.redirect(`/book/${results.rows[0].id}`))
+        .catch(err => handleError(err, response))
+      
+    })
+    .catch (err => handleError(err, response));
+}
 
 
 
