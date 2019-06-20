@@ -22,7 +22,7 @@ client.on('error', err => console.error(err));
 
 
 //API Routs
-app.get('/', newSearch);
+// app.get('/', newSearch);
 app.get('/', getBooks);
 app.post('/books', createBooks)
 app.post('/searches', createSearch);
