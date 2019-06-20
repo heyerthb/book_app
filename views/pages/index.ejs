@@ -15,23 +15,9 @@
 <body>
     <main>
         <h1>BEST BOOKS</h1>
-        <div>
-        <h4> Search By Title and Author</h4>
-            <form action="/searches" method="post">
-                <input type="text" name="search" placeholder="Enter a Title or Author" required>
-                <fieldset>
-                    <label for="title">
-                        <span>Title</span>
-                        <input type="radio" name="search" value="title" required>
-                    </label>
-                </fieldset>
-                <label for="author">
-                    <span>Author</span>
-                    <input type="radio" name="search" value="author" required>
-                </label>
-                </fieldset>
-                <button type="submit"> Search the Google Books API</button>
-            </form>
+
+            <h4 class="view-title"> Saved Books</h4>
+            <p><%= books.length %> Books on the Shelf</p>
             <section class="booklist-container">
                 <ul id="book-list">
                     <% books.forEach(book => { %>

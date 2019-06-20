@@ -22,11 +22,15 @@ client.on('error', err => console.error(err));
 
 
 //API Routs
-// app.get('/', newSearch);
+
 app.get('/', getBooks);
-app.post('/books', createBooks)
 app.post('/searches', createSearch);
-app.post('/index')
+app.get('/searches/new', newSearch);
+app.post('/books', createBooks)
+app.get('/book:id', getSingleBook);
+
+// app.post('/index')
+
 // app.get('/', (request, response) =>{  Not sure what this is RN
 
 ////CATCH ALL
@@ -62,12 +66,19 @@ function createBooks(request, response){
       return client.query(SQL, values)
         .then(results => response.redirect(`/book/${results.rows[0].id}`))
         .catch(err => handleError(err, response))
-      
+
     })
     .catch (err => handleError(err, response));
 }
 
-
+function getSingleBook(request, response){
+  let SQL = `SELECT * FROM books WHERE id=$1;`;
+  let values = [require.params.id];
+  return client.query(SQL, values)
+    .then(results => response.render('pages/book/show', {book: results.rows[0]}))
+    .catch(err => handleError(err, response))
+}
+////////////////////////////^^^^^^^^^ There could be an error hurr.
 
 
 
@@ -88,7 +99,7 @@ function Book(info){
 }
 
 function newSearch(request, response){
-  response.render('pages/index');
+  response.render('pages/searches/new');
 }
 
 function createSearch(request, response) {
@@ -96,14 +107,14 @@ function createSearch(request, response) {
 
   console.log(request.body);
   console.log(request.body.search);
-  //   url += `+intitle:${request.body.search}`;
+  
   if (request.body.search[1] === 'title') { url += `+intitle:${request.body.search[0]}`; }
   if (request.body.search[1] === 'author') { url += `+inauthor:${request.body.search[0]}`; }
 
   superagent.get(url)
 
     .then(apiResponse => {
-      console.log(apiResponse.body.items[0].volumeInfo)
+      // console.log(apiResponse.body.items[0].volumeInfo)
       return apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo));
     })
     .then(results => {
