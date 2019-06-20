@@ -61,3 +61,15 @@ Start time: 9:43
 Finish time: 1:30
 
 Actual time needed to complete: 6 hours total
+
+
+
+Number and name of feature: Feature 2 lab 12
+
+Estimate of time needed to complete: 3 hours
+
+Start time: 11:45
+
+Finish time: 
+
+Actual time needed to complete: 
