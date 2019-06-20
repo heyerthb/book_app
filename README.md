@@ -52,4 +52,12 @@ INSERT INTO books (author, title, ISBN, image_URL, bookshelf, description)
 
 VALUES ('author','title','ISBN','image_URL', 'bookshelf', 'description');
 
+Number and name of feature: Feture 1 lab 12
 
+Estimate of time needed to complete: 3 hours
+
+Start time: 9:43
+
+Finish time: 1:30
+
+Actual time needed to complete: 6 hours total

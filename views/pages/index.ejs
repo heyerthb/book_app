@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="styles/layout.css"/>
     <link rel="stylesheet" href="styles/modules.css"/>
     <title>Document</title>
+
+    
 </head>
 <body>
     <main>
@@ -32,6 +34,18 @@
             </form>
             <section class="booklist-container">
                 <ul id="book-list">
+                    <% books.forEach(book => { %>
+                        <li>
+                            <h3><%=  book.title %></h3>
+                            <img src="<%=book.img_url %>">
+                            <div>
+                                <%= book.author%>
+                            </div>
+                            <p>
+                                <%= book.description %>
+                            </p>
+                        </li>
+                        <% })%>
                   
                 </ul>
 
