@@ -4,24 +4,37 @@ const express = require('express');
 const superagent = require('superagent');
 const app = express();
 
-//adding some green as garnish
-
-
 const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
-
 app.set('view engine', 'ejs');
 
-//adding some green as garnish
+//DB SETUP
+const client = new pg.Client(process.end.DATABASE_URL);
+client.connect();
+client.on('error', err => console.error(err));
 
-app.get('/', (request, response) =>{
-  response.render('pages/index', {message : 'Shield Generator!'});
-})
+
+// WORKING ON DB ROUTING!! LOOK HERE AND RIGHT ABOVE ^^^^^^^
+// app.get('/', (request, response) =>{
+//   let SQL = `SELECT * FROM "books";`;
+
+//   return client.query(SQL)
+//     .then(results => {
+// if (results.rowCount === 0){
+//   response.render('pages/searches/new');
+// } else {
+//       response.render('pages/index', {books: results.rows});
+//     })
+// });
+//   .catch (err => handleError(err, response));
+// }
 
 //API Routs
 app.get('/', newSearch);
 app.post('/searches', createSearch);
+app.post('/index')
+
 
 
 // //////////////ERROR HANDLER .
@@ -46,7 +59,7 @@ function Book(info){
 
   this.title = info.title ? info.title : 'no title available';
   this.authors = info.authors ? info.authors : 'no author available';
-  this.isbn = info.industryIdentifiers ? `ISBN_13 ${info.industryIdentifiers[0].identifier}` : 'No ISBN available'; 
+  this.isbn = info.industryIdentifiers ? `ISBN_13 ${info.industryIdentifiers[0].identifier}` : 'No ISBN available';
   this.image = info.imageLinks ? info.imageLinks.thumbnail.replace(httpRegex, 'https') : placeholderImage;
   this.description = info.description ? info.description :'no description available'
 
@@ -61,7 +74,7 @@ function createSearch(request, response) {
 
   console.log(request.body);
   console.log(request.body.search);
-//   url += `+intitle:${request.body.search}`;
+  //   url += `+intitle:${request.body.search}`;
   if (request.body.search[1] === 'title') { url += `+intitle:${request.body.search[0]}`; }
   if (request.body.search[1] === 'author') { url += `+inauthor:${request.body.search[0]}`; }
 
