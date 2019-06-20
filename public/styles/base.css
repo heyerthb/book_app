@@ -5,8 +5,25 @@
    
 }
 
+
+main{
+    display: grid;
+    grid-template-columns: [one]1fr [two]1fr [three]1fr[end];
+    grid-auto-rows: [one] 15% [two] auto [three] 100px [four] 100px [five] 100px [six] 100px;
+}
+
 h1{
- padding: 5px;
- background-color: green;
- color: black;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    padding: 5%;
+    /* background-color: green; */
+    color: black;
+   
+    font-size: 2em;
+    border-right: 5px solid #cc8899;
+}
+h4{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    align-content: center;
 }
