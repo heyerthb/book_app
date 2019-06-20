@@ -1,8 +1,14 @@
 'use strict';
 
+
+
+
+require('dotenv').config();
 const express = require('express');
 const superagent = require('superagent');
 const app = express();
+const pg = require('pg');
+
 
 const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({extended:true}));
@@ -10,42 +16,42 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 //DB SETUP
-const client = new pg.Client(process.end.DATABASE_URL);
+const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
 client.on('error', err => console.error(err));
 
 
-// WORKING ON DB ROUTING!! LOOK HERE AND RIGHT ABOVE ^^^^^^^
-// app.get('/', (request, response) =>{
-//   let SQL = `SELECT * FROM "books";`;
-
-//   return client.query(SQL)
-//     .then(results => {
-// if (results.rowCount === 0){
-//   response.render('pages/searches/new');
-// } else {
-//       response.render('pages/index', {books: results.rows});
-//     })
-// });
-//   .catch (err => handleError(err, response));
-// }
-
 //API Routs
 app.get('/', newSearch);
+app.get('/', getBooks);
 app.post('/searches', createSearch);
 app.post('/index')
-
-
-
-// //////////////ERROR HANDLER .
-const path = '*'
-function pathNotFoundHandler(request, response){
-  return response.status(404).send('You shall not pass');
-}
+// app.get('/', (request, response) =>{  Not sure what this is RN
 
 ////CATCH ALL
-app.get(path, pathNotFoundHandler);
+// app.get(path, pathNotFoundHandler);
 app.get('*', (request, response) => response.status(404).send('This route does not exist'));
+
+
+// WORKING ON DB ROUTING!! LOOK HERE AND RIGHT ABOVE ^^^^^^^
+
+function getBooks(request, response){
+
+  let SQL = `SELECT * FROM "books";`;
+
+  return client.query(SQL)
+    .then(results => {
+      if (results.rowCount === 0) {
+        response.render('pages/searches/new');
+      } else {
+        response.render('pages/index', {books: results.rows});
+      }
+    })
+    .catch (err => handleError(err, response));
+}
+
+
+
 
 
 
@@ -98,9 +104,9 @@ function handleError (error, response){
   response.status(500).send('No no no')
 }
 
-
-
-
-
 app.listen(PORT, () => console.log(`App is listening on ${PORT}`));
+
+
+
+
 
