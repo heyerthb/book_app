@@ -72,8 +72,8 @@ function createBooks(request, response){
 }
 
 function getSingleBook(request, response){
-  let SQL = `SELECT * FROM books WHERE id=$1;`;
-  let values = [require.params.id];
+  let SQL = `SELECT * FROM books WHERE id=$1;`;   //use temp literals here? request.params.di
+  let values = [request.params.id];
   return client.query(SQL, values)
     .then(results => response.render('pages/book/show', {book: results.rows[0]}))
     .catch(err => handleError(err, response))
