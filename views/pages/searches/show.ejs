@@ -7,15 +7,33 @@
     <title>Document</title>
 </head>
 <body>
-        <ul>
-                <% searchResults.forEach(item => { %>
-                  <li><%= item.title%></li>
-                  <li><%= item.authors%></li>
-                  <li><%= item.description%></li>
-                  <li><%= item.isbn%></li>
-                  <img src="<%=item.image%>"></li>
+    <main>
+        <h4> Search Results</h4>
+        <ul class="search-results">
+            <% searchResults.forEach( book => { %>
+             <li data-book-id="<%= book.isbn %>">
+                     <img src="<%= book.image %>">
+                     <section>
+                         <h3><%= book.title %></h3>
+                         <span><%= book.author %></span>
+                         <p class="desc"><%= book.description %></p>
+                     </section>
+                        <form action='/books' method="post">
+                        <p>Save This Book?</p>
+                        <input type="text" name="title" value="<%= book.title %>" required>
+                        <input type="text" name="author" value="<%= book.author %>" required>
+                        <input type="text" name="isbn" value="<%= book.isbn %>" required>
+                        <input type="text" name="image" value="<%= book.image %>" required>
+                        <textarea name="description" value="<% book.description %>" cols="30"
+                            rows="5"><%= book.description %></textarea>
+                            <p>Enter a Bookshelf name</p>
+                            <input type="text" name="bookshelf" required>
+                            <button id="show-me" type="submit">Submit</button>
+                    </form>
+                </section>    
+                </li>
                 <% }) %>
-          
-              </ul>
+        </ul>
+    </main>
 </body>
 </html>
