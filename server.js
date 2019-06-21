@@ -55,24 +55,26 @@ function getBooks(request, response){
     .catch (err => handleError(err, response));
 }
 function createBooks(request, response){
-  let { title, author, isbn, image_url, description, bookshelf } = require.body;
-  let SQL = `INSERT INTO books (title, author, isbn, image_url, description, bookshelf) VALUES($1, $2, $3, $4, $5, $6):`;
+  let { title, author, isbn, image_url, description, bookshelf } = request.body;
+  let SQL = `INSERT INTO books (title, author, isbn, image_url, description, bookshelf) VALUES($1, $2, $3, $4, $5, $6);`;
   let values = [title, author, isbn, image_url, description, bookshelf];
 
   return client.query(SQL, values)
     .then(()=> {
       SQL = `SELECT * FROM "books" WHERE isbn=$1`;
-      values =[require.body.isbn];
+      values =[request.body.isbn];
       return client.query(SQL, values)
         .then(results => response.redirect(`/book/${results.rows[0].id}`))
         .catch(err => handleError(err, response))
 
     })
     .catch (err => handleError(err, response));
+  // console.log('request.body', request.body);
+  // response.send(request.body);
 }
 
 function getSingleBook(request, response){
-  let SQL = `SELECT * FROM books WHERE id=$1;`;   //use temp literals here? request.params.di
+  let SQL = `SELECT * FROM books WHERE id=$1;`; //use temp literals here? request.params.di
   let values = [request.params.id];
   return client.query(SQL, values)
     .then(results => response.render('pages/book/show', {book: results.rows[0]}))
@@ -107,7 +109,7 @@ function createSearch(request, response) {
 
   console.log(request.body);
   console.log(request.body.search);
-  
+
   if (request.body.search[1] === 'title') { url += `+intitle:${request.body.search[0]}`; }
   if (request.body.search[1] === 'author') { url += `+inauthor:${request.body.search[0]}`; }
 
